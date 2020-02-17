@@ -4,35 +4,36 @@ on:
   push:
     branches:
       - Deploy
-
 jobs:
   publish:
     runs-on: ubuntu-latest
     steps:
-      -
-        name: Checkout
+      - name: Checkout
         uses: actions/checkout@v1
-      -
-        name: Build
+      - name: Build
         run: |
           mkdir public
+          cat > public/README.MD <<EOL
+          GitHub Page 發佈分支
+          EOL
           cat > public/index.html <<EOL
           <!doctype html>
           <html>
             <head>
-              <title>GitHub Pages deployed!</title>
+              <title>Native.Framework</title>
             </head>
             <body>
-              <p>GitHub Pages with <strong>${{ github.sha }}</strong> commit ID has been deployed through <a href="https://github.com/marketplace/actions/github-pages">GitHub Pages action</a> successfully.</p>
+              <p>Native.Framework</p><br><strong>${{ github.sha }}</strong>
             </body>
           </html>
           EOL
-      -
-        name: Deploy
+      - name: Deploy
         if: success()
         uses: crazy-max/ghaction-github-pages@v1
         with:
           target_branch: gh-pages
           build_dir: public
+          keep_history: true
+          fqdn: native.run
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
